@@ -1,0 +1,40 @@
+spring:
+  graphql:
+    graphiql:
+      enabled: true
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: azdev
+      username: root
+      password: rootpassword
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/azdev
+    username: postgres
+    password: password
+  sql:
+    init:
+      platform: postgres
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        current_session_context_class: thread
+        format_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - info
+debug: true

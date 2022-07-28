@@ -1,0 +1,12 @@
+type Query {
+ currentTime: String!
+ taskMainList: [Task!]
+}
+
+type Task {
+ id: ID!
+ createdAt: String!
+ content: String!
+ tags: [String!]!
+ approachCount: Int!
+}

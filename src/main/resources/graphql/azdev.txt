@@ -1,0 +1,121 @@
+
+type Query {
+   taskMainList: [Task!]
+   search(term:String!) : [SearchResultItem!]
+   taskInfo(id: ID!) : Task
+   me : User
+   currentTime:String!
+}
+
+type Mutation {
+  userCreate(input: UserInput!):  UserPayload!
+  userLogin(input: AuthInput):  UserPayload!
+  userDelete: UserDeletePayload!
+  taskCreate(input: TaskInput!): TaskPayload!
+  approachCreate(taskId: ID! input: ApproachInput!): ApproachPayload!
+  approachVote(approachId: ID! input: ApproachVoteInput!): ApproachPayload!
+}
+
+type Subscription {
+   voteChanged(taskId: ID!): Approach!
+   taskMainListChanged: [Task!]
+}
+
+type User {
+    id : ID!
+    createdAt: String!
+    userName: String!
+    name: String
+    taskList: [Task!]!
+}
+
+interface SearchResultItem {
+    id: ID!
+    createdAt: String!
+    content: String!
+}
+
+type Task implements SearchResultItem {
+    approachCount: Int!
+    approachList: [Approach!]!
+    author: User!
+    tags: [String!]!
+}
+
+type Approach implements SearchResultItem {
+    task: Task!
+    voteCount: Int!
+    author: User!
+    detailList : [ApproachDetail!]!
+}
+
+type ApproachDetail {
+  id : ID!
+  content: String!
+  category : ApproachDetailCategory!
+}
+
+type UserError {
+  message: String!
+}
+
+type UserPayLoad {
+  errors: [UserError!]!
+  user: User
+  authToken: String
+}
+
+type UserDeletePayload {
+errors: [UserError!]!
+deletedUserId: ID
+}
+
+type TaskPayload {
+errors: [UserError!]!
+task: Task
+}
+
+type ApproachPayload {
+  errors: [UserError!]!
+  approach: Approach
+  }
+
+
+input UserInput {
+  username: String!
+  password: String!
+  firstName: String
+  lastName: String
+}
+
+input AuthInput {
+  username: String!
+  password: String!
+}
+
+input TaskInput {
+  content: String!
+  tags: [String!]!
+  isPrivate: Boolean!
+  }
+
+input ApproachDetailInput {
+   content: String!
+   category: ApproachDetailCategory!
+}
+
+input ApproachInput {
+  content: String!
+  detailList: [ApproachDetailInput!]!
+  }
+
+input ApproachVoteInput {
+"""true for up-vote and false for down-vote"""
+   up: Boolean!
+ }
+
+enum ApproachDetailCategory {
+  NOTE
+  EXPLANATION
+  WARNING
+}
